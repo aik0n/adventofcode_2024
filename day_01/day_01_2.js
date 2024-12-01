@@ -1,4 +1,4 @@
-function HistorianHysteria_01() {
+function HistorianHysteria_02() {
   var fs = require("fs");
   // var data = fs.readFileSync("./day_01/description_input.txt", "utf-8");
   var data = fs.readFileSync("./day_01/input.txt", "utf-8");
@@ -14,18 +14,26 @@ function HistorianHysteria_01() {
     inputRight.push(right);
   }
 
-  inputLeft.sort();
-  inputRight.sort();
+  var map = {};
+  for (var i = 0; i < inputRight.length; i++) {
+    if (map.hasOwnProperty(inputRight[i])) {
+      map[inputRight[i]] += 1;
+    } else {
+      map[inputRight[i]] = 1;
+    }
+  }
 
   var result = 0;
   for (var i = 0; i < inputLeft.length; i++) {
-    result += Math.abs(parseInt(inputLeft[i]) - parseInt(inputRight[i]));
+    if (map.hasOwnProperty(inputLeft[i])) {
+      result += map[inputLeft[i]] * parseInt(inputLeft[i]);
+    }
   }
 
   console.log(result);
 }
 
-HistorianHysteria_01();
+HistorianHysteria_02();
 
-// 2375403
-// That's the right answer! You are one gold star closer to finding the Chief
+// 23082277
+// That's the right answer! You are one gold star closer to finding the Chief Historian.
