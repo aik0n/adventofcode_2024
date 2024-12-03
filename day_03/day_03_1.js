@@ -1,6 +1,6 @@
 function MullItOver_01() {
   var fs = require("fs");
-  // var text = fs.readFileSync("./day_03/description_input.txt", "utf-8");
+  // var text = fs.readFileSync("./day_03/description_input_01.txt", "utf-8");
   var text = fs.readFileSync("./day_03/input.txt", "utf-8");
 
   let regex = /mul\((\d{1,3}),(\d{1,3})\)/g;
