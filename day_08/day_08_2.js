@@ -10,8 +10,8 @@ class Matrix {
 
 function getMatrix() {
   var fs = require("fs");
-  var text = fs.readFileSync("./day_08/description_input_01.txt", "utf-8");
-  // var text = fs.readFileSync("./day_08/input.txt", "utf-8");
+  // var text = fs.readFileSync("./day_08/description_input_01.txt", "utf-8");
+  var text = fs.readFileSync("./day_08/input.txt", "utf-8");
   var lines = text.split("\r\n").filter((line) => line.trim() !== "");
 
   var data = [];
@@ -79,73 +79,52 @@ function getAntiNodes(matrix, coords, inbound) {
 }
 
 function someMath(matrix, one, two, inbound) {
-  // some kind of vector algebra
-  let deltaX = Math.abs(two[0] - one[0]);
-  let deltaY = Math.abs(two[1] - one[1]);
-  
-  // Y always subtract from first in pair and sum with second in pair
-  // X sum if first coord x in pair is greater, subtract if first coord x is lower
+  let deltaX = one[0] - two[0];
+  let deltaY = one[1] - two[1];
+
   let flag = true;
   let counter = 0;
-  
-  let newNode1 = [];
-  let newNode2 = [];
+  let newNode = [];
 
-  if (one[0] > two[0]) {
-    while (flag) {
-      newNode1[0] = one[0] + deltaX * counter;
-      newNode1[1] = one[1] - deltaY * counter;
-      newNode2[0] = two[0] - deltaX * counter;
-      newNode2[1] = two[1] + deltaY * counter;
+  while (flag) {
+    newNode[0] = one[0] + deltaX * counter;
+    newNode[1] = one[1] + deltaY * counter;
+    let nodeName = createNodeName(newNode);
 
-      let node1 = newNode1[0].toString() + "-" + newNode1[1].toString();
-      if (isInbound(matrix, newNode1)) {
-        if (inbound.indexOf(node1) < 0) {
-          inbound.push(node1);
-        }
-      } else {
-        flag = false;
+    if (isInbound(matrix, newNode)) {
+      if (inbound.indexOf(nodeName) < 0) {
+        inbound.push(nodeName);
       }
-
-      let node2 = newNode2[0].toString() + "-" + newNode2[1].toString();
-      if (isInbound(matrix, newNode2)) {
-        if (inbound.indexOf(node2) < 0) {
-          inbound.push(node2);
-        }
-      } else {
-        flag = false;
-      }
-
-      counter++;
+    } else {
+      flag = false;
     }
-  } else {
-    while (flag) {
-      newNode1[0] = one[0] - deltaX * counter;
-      newNode1[1] = one[1] - deltaY * counter;
-      newNode2[0] = two[0] + deltaX * counter;
-      newNode2[1] = two[1] + deltaY * counter;
 
-      let node1 = newNode1[0].toString() + "-" + newNode1[1].toString();
-      if (isInbound(matrix, newNode1)) {
-        if (inbound.indexOf(node1) < 0) {
-          inbound.push(node1);
-        }
-      } else {
-        flag = false;
-      }
-
-      let node2 = newNode2[0].toString() + "-" + newNode2[1].toString();
-      if (isInbound(matrix, newNode2)) {
-        if (inbound.indexOf(node2) < 0) {
-          inbound.push(node2);
-        }
-      } else {
-        flag = false;
-      }
-
-      counter++;
-    }
+    counter++;
   }
+
+  flag = true;
+  counter = 0;
+
+  while (flag) {
+    newNode[0] = one[0] - deltaX * counter;
+    newNode[1] = one[1] - deltaY * counter;
+    let nodeName = createNodeName(newNode);
+
+    if (isInbound(matrix, newNode)) {
+      if (inbound.indexOf(nodeName) < 0) {
+        inbound.push(nodeName);
+      }
+    } else {
+      flag = false;
+    }
+
+    counter++;
+  }
+}
+
+// [x, y] as input
+function createNodeName(position) {
+  return position[0] + "-" + position[1];
 }
 
 function printNewMatrix(matrix, inbound) {
